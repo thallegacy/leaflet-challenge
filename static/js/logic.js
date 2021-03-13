@@ -35,3 +35,8 @@ function chooseColor(magnitude) {
         return '#b8f15a'
     }
 };
+
+// Function that will determine the radius of a cirle based on the depth
+function getRadius(depth) {
+    return depth * 18000;
+};
