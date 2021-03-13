@@ -1,6 +1,6 @@
 
   // Use this link to get the geojson data.
-var link = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
+var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
 
 // Function that will determine the color of a cirle based on the magnitude
 function chooseColor(magnitude) {
@@ -24,6 +24,12 @@ function getRadius(depth) {
     return depth * 18000;
 };
 
+// Perform a GET request to the query URL
+d3.json(queryUrl, function(data) {
+    // Once we get a response, send the data.features object to the createFeatures function
+    createFeatures(data.features);
+  });
+  
 function createFeatures(earthquakeData) {
 
     // Define a function we want to run once for each feature in the features array
