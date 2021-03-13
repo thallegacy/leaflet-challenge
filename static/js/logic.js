@@ -94,5 +94,5 @@ function createMap(earthquakes) {
         return div;
     };
     
-    legend.addTo(map);
+    legend.addTo(myMap);
 }
