@@ -22,17 +22,20 @@ function getRadius(magnitude) {
       return magnitude * 4;
     }
 };
-
+let earthquakeData, plateData;
 // Perform a GET request to the query URL
 (async function(){
     var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
-    var earthquakeData = await d3.json(queryUrl);
-
     var plateUrl = 'https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json';
-    var plateData = await d3.json(plateUrl);
+    await d3.json(queryUrl, async function(data) {
+        earthquakeData = data.features;
+        await d3.json(plateUrl, function(data){
+            plateData = data.features;
+            createFeatures(earthquakeData, plateData);
+        });
+    });
+    
 
-    // Once we get a response, send the data.features objects to the createFeatures function
-    createFeatures(earthquakeData.features, plateData.features);
 })()
   
 function createFeatures(earthquakeData, plateData) {
@@ -108,7 +111,8 @@ function createMap(earthquakes, plates) {
         "Outdoors": outdoorsmap
 
     };
-
+    console.log(earthquakes)
+    console.log(plates)
     // Create overlay object to hold our overlay layer
     var overlayMaps = {
         Earthquakes: earthquakes,
