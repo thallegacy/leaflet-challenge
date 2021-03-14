@@ -1,6 +1,5 @@
 
-  // Use this link to get the geojson data.
-var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
+
 
 // Function that will determine the color of a cirle based on the depth
 function getColor(depth) {
@@ -25,12 +24,18 @@ function getRadius(magnitude) {
 };
 
 // Perform a GET request to the query URL
-d3.json(queryUrl, function(data) {
-    // Once we get a response, send the data.features object to the createFeatures function
-    createFeatures(data.features);
-  });
+(async function(){
+    var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
+    var earthquakeData = await d3.json(queryUrl);
+
+    var plateUrl = 'https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json';
+    var plateData = await d3.json(plateUrl);
+
+    // Once we get a response, send the data.features objects to the createFeatures function
+    createFeatures(earthquakeData.features, plateData.features);
+})()
   
-function createFeatures(earthquakeData) {
+function createFeatures(earthquakeData, plateData) {
 
     // Define a function we want to run once for each feature in the features array
     // Give each feature a popup describing the place and time of the earthquake
@@ -55,11 +60,17 @@ function createFeatures(earthquakeData) {
         onEachFeature: onEachFeature
     });
 
+    var plates = L.geoJSON(plateData, {
+        color: "orange",
+        fillColor: "white",
+        fillOpacity:0
+    });
+
     // Sending our earthquakes layer to the createMap function
-    createMap(earthquakes);
+    createMap(earthquakes,plates);
 }
 
-function createMap(earthquakes) {
+function createMap(earthquakes, plates) {
 
   
 
@@ -100,13 +111,14 @@ function createMap(earthquakes) {
 
     // Create overlay object to hold our overlay layer
     var overlayMaps = {
-        Earthquakes: earthquakes
+        Earthquakes: earthquakes,
+        "Techtonic Plates": plates
     };
         // Create our map, giving it the streetmap and earthquakes layers to display on load
     var myMap = L.map("map", {
         center: [37.09, -95.71],
         zoom: 5,
-        layers: [satellitemap, earthquakes]
+        layers: [satellitemap, earthquakes, plates]
     });
 
     // Create a layer control
