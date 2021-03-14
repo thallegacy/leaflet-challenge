@@ -16,7 +16,12 @@ function getColor(depth) {
 
 // Function that will determine the radius of a cirle based on the magnitude
 function getRadius(magnitude) {
-    return magnitude *18000;
+    if (magnitude === 0) {
+      return 1;
+    }
+    else{
+      return magnitude * 4;
+    }
 };
 
 // Perform a GET request to the query URL
@@ -39,7 +44,7 @@ function createFeatures(earthquakeData) {
     // Run the onEachFeature function once for each piece of data in the array
     var earthquakes = L.geoJSON(earthquakeData, {
         pointToLayer: function(feature, location) {
-            return new L.Circle(location, {
+            return new L.circleMarker(location, {
                 radius: getRadius(feature.properties.mag),
                 fillColor: getColor(feature.geometry.coordinates[2]),
                 fillOpacity: 1.0,
