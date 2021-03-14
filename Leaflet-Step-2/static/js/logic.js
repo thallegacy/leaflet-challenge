@@ -64,7 +64,7 @@ function createMap(earthquakes) {
   
 
     // Define title layer
-    var streetlayer = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
         attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
         tileSize: 512,
         maxZoom: 18,
@@ -82,7 +82,7 @@ function createMap(earthquakes) {
 
       // Define a baseMaps object to hold our base layers
     var baseMaps = {
-        "Street Map": streetmap,
+        "Light Map": lightmap,
         "Dark Map": darkmap
     };
 
@@ -94,9 +94,15 @@ function createMap(earthquakes) {
     var myMap = L.map("map", {
         center: [37.09, -95.71],
         zoom: 5,
-        layers: [streetlayer, earthquakes]
+        layers: [lightmap, earthquakes]
     });
 
+    // Create a layer control
+    // Pass in our baseMaps and overlayMaps
+    // Add the layer control to the map
+    L.control.layers(baseMaps, overlayMaps, {
+    collapsed: false
+    }).addTo(myMap);
 
     var legend = L.control({position: 'bottomright'});
 
