@@ -2,19 +2,19 @@
   // Use this link to get the geojson data.
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
 
-// Function that will determine the color of a cirle based on the magnitude
+// Function that will determine the color of a cirle based on the depth
 function getColor(depth) {
-    return depth > 1000 ? '#800026' :
-           depth > 500  ? '#BD0026' :
-           depth > 200  ? '#E31A1C' :
-           depth > 100  ? '#FC4E2A' :
-           depth > 50   ? '#FD8D3C' :
-           depth > 20   ? '#FEB24C' :
-           depth > 10   ? '#FED976' :
-                      '#FFEDA0';
+    return depth > 1000 ? '#005a32' :
+           depth > 500  ? '#238443' :
+           depth > 200  ? '#41ab5d' :
+           depth > 100  ? '#78c679' :
+           depth > 50   ? '#addd8e' :
+           depth > 20   ? '#d9f0a3' :
+           depth > 10   ? '#f7fcb9' :
+                      '#ffffe5';
 }
 
-// Function that will determine the radius of a cirle based on the depth
+// Function that will determine the radius of a cirle based on the magnitude
 function getRadius(magnitude) {
     return magnitude *18000;
 };
@@ -80,7 +80,7 @@ function createMap(earthquakes) {
 
     legend.onAdd = function (map) {
     
-        var div = L.DomUtil.create('div', 'info legend'),
+        var div = L.DomUtil.create('div', 'legend'),
             grades = [0, 10, 20, 50, 100, 200, 500, 1000],
             labels = [];
     
